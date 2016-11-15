@@ -3,8 +3,8 @@ Incremental Backup via rsync with hard links for instant deduplication. Works bo
 
 #History
 This is a script that originated in the year 2000 with a need to backup to a central server a complete 
-copy of an entire Windows file server across 7 offices separated by T1 connections with a document retention 
-policy that allowed for day-by-day snapshot of the entire directory. In 2000, each office had roughly 100 GiB of data. Within 2 years this script was backing up 400,000 files (~3 TiB) nightly and after 10 years the script was backing up 22 TiB twice daily and once nightly with a complete filesystem backup/snapshot of the file servers each and every day with general files having a 12 month archive and key projects going back since the origin. The script was later modified to also backup key files to an archive directory for permanent storage. All this without massive disk requirements due to the dedupliation that's built natively into doing this via hard links.  
+copy of all data on 7 Windows file servers across 7 offices separated by T1 connections with a document retention 
+policy of day-by-day snapshots of the entire directory and offsite storage. In 2000, each office had roughly 100 GiB of data. Within 2 years this script was backing up 400,000 files (~3 TiB) nightly and after 10 years the script was backing up 22 TiB twice daily and once nightly with a complete filesystem backup/snapshot of the file servers each and every day with general files having a 12 month.  The script was later modified to also backup key files to an archive directory for permanent storage. All this without massive disk requirements due to the dedupliation that's built into the system using hard links in the daily snapshot.  
 
 Historically to deal with issues of network connectivity and CIFS hanging this script has serveral checks to make sure remote servers are accessible, mountpoints are still mounted, etc.
 
