@@ -45,12 +45,12 @@ to compile and deliver a perfectly working c binary.
 
 ### Sample usage
 
-# Example: a mounted directory /path/to/backup/dir where * you want to check to see if that drive has less than 90% filled before backing up to it, * you want to delete directories over 20 days old, * ignore .snap
+### Example: a mounted directory /path/to/backup/dir where * you want to check to see if that drive has less than 90% filled before backing up to it, * you want to delete directories over 20 days old, * ignore .snap
 
 ./backupinator.sh -v -l -i /path/to/input/directory/ -o /path/to/backup/dir -M /path/to/backup/dir  -a admin@example.com -w 90 -E .snap -b -e errors@example.com -d 20
 
 
-# Example: same as above but also ignore any files ending with .wav. The -E flag is the same as the one for rsync. 
+### Example: same as above but also ignore any files ending with .wav. The -E flag is the same as the one for rsync. 
 
 ./backupinator.sh -v -l -i /path/to/input/directory/ -o /path/to/backup/dir -M /path/to/backup/dir  -a admin@example.com -w 90 -E .snap -E .wav -b -e errors@example.com -d 20
 
