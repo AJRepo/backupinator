@@ -1,0 +1,4 @@
+script:
+  # Check fi-backup.sh syntax
+  - shellcheck backupinator.sh
+
