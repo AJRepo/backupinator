@@ -14,7 +14,10 @@ Ksh. I wrote this originally in bash but converted to ksh because of the ability
 to compile and deliver a perfectly working c binary. 
 
 ### Syntax
- Usage: backupinator.sh: [-l] [-v] <-i input_directory> <-o backup_directory> [-a alert@email.addresses] [-d #days_to_keep] [-E exclude] [-e errors@email.address,err@address2,...] 
+ Usage: 
+
+```
+backupinator.sh: [-l] [-v] <-i input_directory> <-o backup_directory> [-a alert@email.addresses] [-d #days_to_keep] [-E exclude] [-e errors@email.address,err@address2,...] 
  
 
 -l      Create a log file and keep it (otherwise delete log file)
@@ -40,6 +43,8 @@ to compile and deliver a perfectly working c binary.
 -s      Subject for Email   Something to use on the email subject line
 -S      Reserved for later: Rsync over ssh (remote rsync now does via rsync:// protocol) 
 -w      Warning Level   Send and alert when the amount of disk used space is above this percentage
+```
+
 
 ### Sample usage
 
