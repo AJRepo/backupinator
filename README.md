@@ -6,9 +6,7 @@ This is a script that originated in the year 2000 with a need to backup to a cen
 copy of all data on 7 Windows file servers across 7 offices separated by T1 connections with a document retention 
 policy of day-by-day snapshots of each local office's server's shares to offsite storage. In 2000, each office had roughly 100 GiB of data. Within 2 years this script (paired with rsync servers) was backing up 400,000 files (~3 TiB) nightly and after 10 years, backing up to a central repository 22 TiB twice daily and once nightly with a complete daily filesystem backup/snapshot from each of the 7 file servers.  The script was later modified to autodelete after N days and recognize key files to move to an archive directory for permanent storage. All this was possible without massive network connections due to rsync's server to server binary differential speedup and possible without massive disk requirements due to dedupliation that's built into backupinator using hard links in the daily snapshot for unchanged files.  
 
-Historically to deal with issues of network connectivity and CIFS hanging this script has serveral checks to make sure remote servers are accessible, mountpoints are still mounted, etc.
-
-By having daily incremental remote snapshots this script helps defends against both internal errors and external attacks. 
+Historically, to deal with issues of network connectivity and CIFS hanging, this script has serveral checks to make sure remote servers are accessible, mountpoints are still mounted, etc.
 
 ### Dependencies
 
