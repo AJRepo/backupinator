@@ -35,7 +35,7 @@ backupinator.sh: [-l] [-v] <-i input_directory> <-o backup_directory> [-a alert@
 -D      Delete files that do not exist on sender
 -E      Exclude files   Pattern of files to exclude, can be used more than once
 -f      Extra flags    Anything else you want to pass to rsync
--h      host      A remote host - ping first to see if it is up. If not used then assume the host is available
+-h      host      A remote host - ping first to see if it is up. If not used assume the host is available
 -m      CIFS_mount_drive   Sometimes CIFS connections hang to windows servers - this unmounts and remounts all CIFS shares. TODO: just operate on the CIFS share specified. 
 -M      Mountpoint_dir: Check that dir Mountpoint_dir is a mounted directory. This is to avoid writing to your own disk when expecting it to be a externally attached drive
 -r      Archive directory   What directory to archive to (does not work on FreeBSD)
