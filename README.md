@@ -1,5 +1,5 @@
 # backupinator
-Incremental Backup via rsync with hard links for instant deduplication. Works both for linux and Free BSD
+Incremental Backup via rsync with hard links for instant deduplication. Works both for linux (tested in RedHat, OpenSuse and Ubuntu) and FreeBSD (tested in FreeNAS)
 
 ###History
 This is a script that originated in the year 2000 with a need to backup to a central server a complete 
