@@ -50,7 +50,7 @@ to compile and deliver a perfectly working c binary.
      ./backupinator.sh -v -l -i /path/to/input/directory/ -o /path/to/backup/dir -M /path/to/backup/dir  -a admin@example.com -w 90 -E .snap -b -e errors@example.com -d 20
 
 
-* Same as above but also ignore any files ending with .wav. The -E flag is the same as the one for rsync. 
+* Same as above but also ignore any files ending with .wav. The -E flag calls rsync's --exclude flag.
 
      ./backupinator.sh -v -l -i /path/to/input/directory/ -o /path/to/backup/dir -M /path/to/backup/dir  -a admin@example.com -w 90 -E .snap -E .wav -b -e errors@example.com -d 20
 
