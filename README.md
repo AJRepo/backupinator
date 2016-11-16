@@ -51,12 +51,15 @@ backupinator.sh: [-l] [-v] <-i input_directory> <-o backup_directory> [-a alert@
 
 #### Examples:
 
-* A mounted directory /path/to/backup/dir where * you want to check to see if that drive has less than 90% filled before backing up to it, * you want to delete directories over 20 days old, * ignore .snap
+* A mounted directory /path/to/backup/dir with the following 
+  * check to see if that drive has less than 90% filled before backing up to it, 
+  * delete directories over 20 days old, 
+  * ignore files/directories named .snap
 
      ./backupinator.sh -v -l -i /path/to/input/directory/ -o /path/to/backup/dir -M /path/to/backup/dir  -a admin@example.com -w 90 -E .snap -b -e errors@example.com -d 20
 
 
-* Same as above but also ignore any files ending with .wav. The -E flag calls rsync's --exclude flag.
+* Same as above but *also* ignore any files ending with .wav. The -E flag calls rsync's --exclude flag.
 
      ./backupinator.sh -v -l -i /path/to/input/directory/ -o /path/to/backup/dir -M /path/to/backup/dir  -a admin@example.com -w 90 -E .snap -E .wav -b -e errors@example.com -d 20
 
