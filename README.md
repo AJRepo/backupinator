@@ -4,7 +4,7 @@ Incremental Backup via rsync with hard links for instant deduplication. Works bo
 ###History
 This is a script that originated in the year 2000 with a need to backup to a central server a complete 
 copy of all data on 7 Windows file servers across 7 offices separated by T1 connections with a document retention 
-policy of day-by-day snapshots of the entire directory and offsite storage. In 2000, each office had roughly 100 GiB of data. Within 2 years this script was backing up 400,000 files (~3 TiB) nightly and after 10 years the script was backing up 22 TiB twice daily and once nightly with a complete filesystem backup/snapshot of the file servers each and every day with general files having a 12 month.  The script was later modified to also backup key files to an archive directory for permanent storage. All this without massive disk requirements due to the dedupliation that's built into the system using hard links in the daily snapshot.  
+policy of day-by-day snapshots of the entire directory and offsite storage. In 2000, each office had roughly 100 GiB of data. Within 2 years this script (paired with rsync servers) was backing up 400,000 files (~3 TiB) nightly and after 10 years, backing up to a central repository 22 TiB twice daily and once nightly with a complete daily filesystem backup/snapshot from each of the 7 file servers.  The script was later modified to autodelete after N days and recognize key files to move to an archive directory for permanent storage. All this without massive disk requirements due to dedupliation that's built into the system using hard links in the daily snapshot.  
 
 Historically to deal with issues of network connectivity and CIFS hanging this script has serveral checks to make sure remote servers are accessible, mountpoints are still mounted, etc.
 
@@ -45,14 +45,16 @@ to compile and deliver a perfectly working c binary.
 
 ### Sample usage
 
-### Example: a mounted directory /path/to/backup/dir where * you want to check to see if that drive has less than 90% filled before backing up to it, * you want to delete directories over 20 days old, * ignore .snap
+#### Examples:
 
-./backupinator.sh -v -l -i /path/to/input/directory/ -o /path/to/backup/dir -M /path/to/backup/dir  -a admin@example.com -w 90 -E .snap -b -e errors@example.com -d 20
+* A mounted directory /path/to/backup/dir where * you want to check to see if that drive has less than 90% filled before backing up to it, * you want to delete directories over 20 days old, * ignore .snap
+
+     ./backupinator.sh -v -l -i /path/to/input/directory/ -o /path/to/backup/dir -M /path/to/backup/dir  -a admin@example.com -w 90 -E .snap -b -e errors@example.com -d 20
 
 
-### Example: same as above but also ignore any files ending with .wav. The -E flag is the same as the one for rsync. 
+* Same as above but also ignore any files ending with .wav. The -E flag is the same as the one for rsync. 
 
-./backupinator.sh -v -l -i /path/to/input/directory/ -o /path/to/backup/dir -M /path/to/backup/dir  -a admin@example.com -w 90 -E .snap -E .wav -b -e errors@example.com -d 20
+     ./backupinator.sh -v -l -i /path/to/input/directory/ -o /path/to/backup/dir -M /path/to/backup/dir  -a admin@example.com -w 90 -E .snap -E .wav -b -e errors@example.com -d 20
 
 ### Notes
 
