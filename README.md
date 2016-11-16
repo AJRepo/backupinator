@@ -51,10 +51,12 @@ backupinator.sh: [-l] [-v] <-i input_directory> <-o backup_directory> [-a alert@
 
 #### Examples:
 
-* A mounted directory /path/to/backup/dir with the following 
-  * check to see if that drive has less than 90% filled before backing up to it, 
+* Backup to mounted directory /path/to/backup/dir with the following 
+  * a check to see if the backup drive has less than 90% filled before backing up to it, 
   * delete directories over 20 days old, 
   * ignore files/directories named .snap
+  * errors sent to errors@example.com
+  * save the log file (-l) instead of deleting it at the end
 
      ./backupinator.sh -v -l -i /path/to/input/directory/ -o /path/to/backup/dir -M /path/to/backup/dir  -a admin@example.com -w 90 -E .snap -b -e errors@example.com -d 20
 
