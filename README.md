@@ -16,8 +16,9 @@ to compile and deliver a perfectly working c binary.
 ### Syntax
  Usage: 
 
-```
 backupinator.sh: [-l] [-v] <-i input_directory> <-o backup_directory> [-a alert@email.addresses] [-d #days_to_keep] [-E exclude] [-e errors@email.address,err@address2,...] 
+
+```
  
 
 -l      Create a log file and keep it (otherwise delete log file)
@@ -34,15 +35,15 @@ backupinator.sh: [-l] [-v] <-i input_directory> <-o backup_directory> [-a alert@
 -D      Delete files that do not exist on sender
 -E      Exclude files   Pattern of files to exclude, can be used more than once
 -f      Extra flags    Anything else you want to pass to rsync
--h      host      A remote host - used to ping first to see if it is up. If not used then it will just assume the host is available
+-h      host      A remote host - ping first to see if it is up. If not used then assume the host is available
 -m      CIFS_mount_drive   Sometimes CIFS connections hang to windows servers - this unmounts and remounts all CIFS shares. TODO: just operate on the CIFS share specified. 
--M      Mountpoint_dir   Check to make sure that dir Mountpoint_dir is a mounted directory. This is to avoid writing to your own disk when expecting it to be a externally attached drive
+-M      Mountpoint_dir: Check that dir Mountpoint_dir is a mounted directory. This is to avoid writing to your own disk when expecting it to be a externally attached drive
 -r      Archive directory   What directory to archive to (does not work on FreeBSD)
 -R      Archive PATTERN   Pattern of files to copy to the archive directory
         (Archive files are a permanent copy of files that are never deleted)
 -s      Subject for Email   Something to use on the email subject line
 -S      Reserved for later: Rsync over ssh (remote rsync now does via rsync:// protocol) 
--w      Warning Level   Send and alert when the amount of disk used space is above this percentage
+-w      Warning Level   Send an alert if the percent of disk used is above this number
 ```
 
 
