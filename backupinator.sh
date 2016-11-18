@@ -51,8 +51,13 @@ if [ "$MAJOR_RSYNC_VERSION" -lt 3 ] ; then
 fi
 
 
-#assume eth0 is our net card #assume we're not using ipv6
-LOCAL_IP=$(/sbin/ifconfig eth0 | grep inet | sed -e /inet6/d | awk '{print $2}' | sed -e /addr:/s///)
+#assume we're not using ipv6
+if [ "$OS" == "FreeBSD" ]; then
+  LOCAL_INTERFACE=$(route get default | grep interface | awk '{print $2}')
+else
+  LOCAL_INTERFACE=$(route | grep default | awk '{print $8}')
+fi
+LOCAL_IP=$(/sbin/ifconfig "$LOCAL_INTERFACE" | grep inet | sed -e /inet6/d | awk '{print $2}' | sed -e /addr:/s///)
 
 #Name of server must not have spaces
 HOSTNAME=$(hostname)
