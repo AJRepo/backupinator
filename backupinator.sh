@@ -477,7 +477,7 @@ fi
 
 #All tests pass? Ok we're ready to start
 echo "Starting rsync version $RSYNC_VERSION from backupinator version $VERSION" > "$LOG_FILE"
-echo "PATH=$PATH" > "$LOG_FILE"
+echo "PATH=$PATH" >> "$LOG_FILE"
 
 
 ARCHIVE_TEST_FILE=$(find "$ARCHIVE_FILES" -maxdepth 1 -mindepth 1 -name "$ARCHIVE_FILES" | tail -1)
