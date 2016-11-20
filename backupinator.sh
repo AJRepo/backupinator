@@ -503,7 +503,8 @@ fi
 
 printf "Start Rsync: %s\nrsync EXTRA=%s \nOLD=%s \nVERBOSE=%s\s --exclude 'B*.rbf' ORIG=%s BACK=%s\n\n" "$(date)" "$EXTRA_FLAGS" "$OLD_VERSION" "$VERBOSE" "$ORIGINAL_DIR" "$BACKUP_DIR" >> "$LOG_FILE"
 
-#echo "rsync  -rltgoDz -h $OLD_VERSION $VERBOSE --stats  --no-whole-file --delete --exclude '*.bak' --exclude '*.BAK' --exclude '*.tmp' --exclude '*.TMP' --exclude '*.lnk' --exclude 'B*.rbf'  $ORIGINAL_DIR $BACKUP_DIR >> $LOG_FILE 2>&1"
+#Some good excludes for backing up windows machines
+#--exclude '*.bak' --exclude '*.BAK' --exclude '*.tmp' --exclude '*.TMP' --exclude '*.lnk' --exclude 'B*.rbf'
 
 
 #really when we are connecting to a windows machine - we don't care about owner
