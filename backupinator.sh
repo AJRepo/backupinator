@@ -501,7 +501,7 @@ else
     fi
 fi
 
-printf "Start Rsync: %s\nrsync EXTRA=%s \nOLD=%s \nVERBOSE=%s\s --exclude 'B*.rbf' ORIG=%s BACK=%s\n\n" "$(date)" "$EXTRA_FLAGS" "$OLD_VERSION" "$VERBOSE" "$ORIGINAL_DIR" "$BACKUP_DIR" >> "$LOG_FILE"
+printf "Start Rsync: %s\nrsync flags\nEXTRA=%s\nOLD=%s\nVERBOSE=%s\nDELETE=%s\nEXCLUDES=%s\nORIG=%sBACK=%s\n\n" "$(date)" "$EXTRA_FLAGS" "$OLD_VERSION" "$VERBOSE" "$DELETE" "$EXCLUDES" "$ORIGINAL_DIR" "$BACKUP_DIR" >> "$LOG_FILE"
 
 #Some good excludes for backing up windows machines
 #--exclude '*.bak' --exclude '*.BAK' --exclude '*.tmp' --exclude '*.TMP' --exclude '*.lnk' --exclude 'B*.rbf'
