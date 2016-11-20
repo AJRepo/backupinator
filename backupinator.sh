@@ -182,7 +182,7 @@ do
   D)  #Dflag=1
     #Delete files from destination that do not exist on source
     #Dval="$OPTARG"
-    DELETE=" --delete --delete-excluded " 
+    DELETE="--delete --delete-excluded " 
     ;;
   d)  dflag=1
     #Days to keep archive
@@ -197,7 +197,11 @@ do
   E)  #Eflag=1
     #Exclude options passed to rsync
     #eval="$OPTARG"
-    EXCLUDES="$EXCLUDES --exclude $OPTARG"
+    if [ "$EXCLUDES" == "" ]; then 
+      EXCLUDES="--exclude=$OPTARG"
+    else 
+      EXCLUDES="$EXCLUDES --exclude=$OPTARG"
+    fi
     ;;
   f)  #fflag=1
     #If you want to pass an extra flag to rsync.
@@ -228,12 +232,12 @@ do
   n)  nflag=1
     #n dry-run flag
     #nval="$OPTARG"
-    DRY_RUN=" -n "
+    DRY_RUN="-n "
     ;;
   O)  #Oflag=1
     #o for out
     #Oval="$OPTARG"
-    OLD_VERSION=" --old-d "
+    OLD_VERSION="--old-d "
     ;;
   o)  oflag=1
     #o for out
@@ -374,7 +378,7 @@ fi   #end if test to see if remote site is rsync and up
 #exit
 
 if [ "$CREATE_LOG" == "yes" ] ; then 
-  VERBOSE=" -v --itemize-changes"
+  VERBOSE="-v --itemize-changes"
   LOG_FILE=$BACKUP_ROOT_LEVEL/backup.$LONGDATE.log
 else
   VERBOSE=""
@@ -509,6 +513,9 @@ printf "Start Rsync: %s\nrsync flags\nEXTRA=%s\nOLD=%s\nVERBOSE=%s\nDELETE=%s\nE
 
 #really when we are connecting to a windows machine - we don't care about owner
 #dropping -o 
+
+#echo  "$EXTRA_FLAGS" "$DRY_RUN" --human-readable $VERBOSE "$OLD_VERSION" --stats --no-whole-file "$DELETE" "$EXCLUDES" "$ORIGINAL_DIR" "$BACKUP_DIR" 
+#exit
 rsync  -rltgDz "$EXTRA_FLAGS" "$DRY_RUN" --human-readable $VERBOSE "$OLD_VERSION" --stats --no-whole-file "$DELETE" "$EXCLUDES" "$ORIGINAL_DIR" "$BACKUP_DIR" >> "$LOG_FILE" 2>&1
 
 ERROR_CODE=$?
