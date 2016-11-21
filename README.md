@@ -24,7 +24,7 @@ backupinator.sh: [-l] [-v] <-i input_directory> <-o backup_directory> [-a alert@
  
 
 -l      Create a log file and keep it (otherwise delete log file)
--v      Debug Mode (very verbose)
+-v      Debug Mode (very verbose), executes "set -x" 
 -n      Dry Run: Don't actually do the rsync part
 -i      directory     Original Directory (input), required
 -o      directory    Backup Directory (output), required
@@ -60,12 +60,12 @@ backupinator.sh: [-l] [-v] <-i input_directory> <-o backup_directory> [-a alert@
   * errors sent to errors@example.com
   * save the log file (-l) instead of deleting it at the end
 
-     ./backupinator.sh -v -l -i /path/to/input/directory/ -o /path/to/backup/dir -M /path/to/backup/dir  -a admin@example.com -w 90 -E .snap -b -e errors@example.com -d 20
+     ./backupinator.sh -l -i /path/to/input/directory/ -o /path/to/backup/dir -M /path/to/backup/dir  -a admin@example.com -w 90 -E .snap -b -e errors@example.com -d 20
 
 
 * Same as above but *also* ignore any files ending with .wav. The -E flag calls rsync's --exclude flag.
 
-     ./backupinator.sh -v -l -i /path/to/input/directory/ -o /path/to/backup/dir -M /path/to/backup/dir  -a admin@example.com -w 90 -E .snap -E .wav -b -e errors@example.com -d 20
+     ./backupinator.sh -l -i /path/to/input/directory/ -o /path/to/backup/dir -M /path/to/backup/dir  -a admin@example.com -w 90 -E .snap -E .wav -b -e errors@example.com -d 20
 
 ### Notes
 
