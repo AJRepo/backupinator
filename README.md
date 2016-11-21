@@ -12,7 +12,7 @@ Historically, to deal with issues of network connectivity and CIFS hanging, this
 
 ### Dependencies
 
-rsync and Ksh. I wrote this originally in bash but converted to ksh because of the ability to use shcomp 
+Rsync and ksh. I wrote this originally in bash but converted to ksh because of the ability to use shcomp 
 to compile and deliver a perfectly working c binary. 
 
 ### Syntax
