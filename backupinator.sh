@@ -149,6 +149,7 @@ wflag=
 EXCLUDES=""
 DELETE=""
 OLD_VERSION=""
+DRYRUN=""
 
 
 #warning! make sure that a: is the first : in the list
@@ -182,7 +183,7 @@ do
   D)  #Dflag=1
     #Delete files from destination that do not exist on source
     #Dval="$OPTARG"
-    DELETE="--delete --delete-excluded " 
+    DELETE="--delete --delete-excluded" 
     ;;
   d)  dflag=1
     #Days to keep archive
@@ -232,12 +233,12 @@ do
   n)  nflag=1
     #n dry-run flag
     #nval="$OPTARG"
-    DRY_RUN="-n "
+    DRYRUN="-n"
     ;;
   O)  #Oflag=1
     #o for out
     #Oval="$OPTARG"
-    OLD_VERSION="--old-d "
+    OLD_VERSION="--old-d"
     ;;
   o)  oflag=1
     #o for out
@@ -505,7 +506,7 @@ else
     fi
 fi
 
-printf "Start Rsync: %s\nrsync flags\nEXTRA=%s\nOLD=%s\nVERBOSE=%s\nDELETE=%s\nEXCLUDES=%s\nORIG=%sBACK=%s\n\n" "$(date)" "$EXTRA_FLAGS" "$OLD_VERSION" "$VERBOSE" "$DELETE" "$EXCLUDES" "$ORIGINAL_DIR" "$BACKUP_DIR" >> "$LOG_FILE"
+printf "Start Rsync: %s\nrsync flags\nEXTRA=%s\nOLD=%s\nVERBOSE=%s\nDELETE=%s\nEXCLUDES=%s\nORIG=%sBACK=%s\n\n" "$(date)" "$EXTRA_FLAGS" $OLD_VERSION "$VERBOSE" "$DELETE" "$EXCLUDES" "$ORIGINAL_DIR" "$BACKUP_DIR" >> "$LOG_FILE"
 
 #Some good excludes for backing up windows machines
 #--exclude '*.bak' --exclude '*.BAK' --exclude '*.tmp' --exclude '*.TMP' --exclude '*.lnk' --exclude 'B*.rbf'
@@ -514,9 +515,9 @@ printf "Start Rsync: %s\nrsync flags\nEXTRA=%s\nOLD=%s\nVERBOSE=%s\nDELETE=%s\nE
 #really when we are connecting to a windows machine - we don't care about owner
 #dropping -o 
 
-#echo  "$EXTRA_FLAGS" "$DRY_RUN" --human-readable $VERBOSE "$OLD_VERSION" --stats --no-whole-file "$DELETE" "$EXCLUDES" "$ORIGINAL_DIR" "$BACKUP_DIR" 
+#echo  "$EXTRA_FLAGS" "$DRYRUN" --human-readable $VERBOSE $OLD_VERSION --stats --no-whole-file "$DELETE" "$EXCLUDES" "$ORIGINAL_DIR" "$BACKUP_DIR" 
 #exit
-rsync  -rltgDz "$EXTRA_FLAGS" "$DRY_RUN" --human-readable $VERBOSE "$OLD_VERSION" --stats --no-whole-file "$DELETE" "$EXCLUDES" "$ORIGINAL_DIR" "$BACKUP_DIR" >> "$LOG_FILE" 2>&1
+rsync  -rltgDz "$EXTRA_FLAGS" $DRYRUN --human-readable $VERBOSE $OLD_VERSION --stats --no-whole-file "$DELETE" "$EXCLUDES" "$ORIGINAL_DIR" "$BACKUP_DIR" >> "$LOG_FILE" 2>&1
 
 ERROR_CODE=$?
 if [ "$ERROR_CODE" != 0 ] ; then
