@@ -150,6 +150,7 @@ EXCLUDES=""
 DELETE=""
 OLD_VERSION=""
 DRYRUN=""
+EXTRA_FLAGS=""
 
 
 #warning! make sure that a: is the first : in the list
@@ -517,7 +518,12 @@ printf "Start Rsync: %s\nrsync flags\nEXTRA=%s\nOLD=%s\nVERBOSE=%s\nDELETE=%s\nE
 
 #echo  "$EXTRA_FLAGS" "$DRYRUN" --human-readable $VERBOSE $OLD_VERSION --stats --no-whole-file "$DELETE" "$EXCLUDES" "$ORIGINAL_DIR" "$BACKUP_DIR" 
 #exit
-rsync  -rltgDz "$EXTRA_FLAGS" $DRYRUN --human-readable $VERBOSE $OLD_VERSION --stats --no-whole-file "$DELETE" "$EXCLUDES" "$ORIGINAL_DIR" "$BACKUP_DIR" >> "$LOG_FILE" 2>&1
+EXTRA_FLAGS="$EXTRA_FLAGS $DELETE $EXCLUDES"
+if [ "$EXTRA_FLAGS" == "" ]; then 
+  rsync  -rltgDz $DRYRUN --human-readable $VERBOSE $OLD_VERSION --stats --no-whole-file "$ORIGINAL_DIR" "$BACKUP_DIR" >> "$LOG_FILE" 2>&1
+else 
+  rsync  -rltgDz "$EXTRA_FLAGS" $DRYRUN --human-readable $VERBOSE $OLD_VERSION --stats --no-whole-file "$ORIGINAL_DIR" "$BACKUP_DIR" >> "$LOG_FILE" 2>&1
+fi
 
 ERROR_CODE=$?
 if [ "$ERROR_CODE" != 0 ] ; then
