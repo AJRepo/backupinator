@@ -69,7 +69,9 @@ backupinator.sh: [-l] [-v] <-i input_directory> <-o backup_directory> [-a alert@
 
 ### Notes
 
-See the License file for copyright terms. Use of this script is at your own risk. Linux/Unix does not ask "if you meant to do that" and there are "rm -rf" commands in this script if you choose to use the -d flag. Use the "-n" flag for a "dry run" to see a list of commands of what will happen. 
+See the License file for copyright terms. Use of this script is at your own risk. Linux/Unix does not ask "if you meant to do that" and there are "rm -rf" commands in this script if you choose to use the -d flag. 
+
+Use the "-n" flag for a "dry run" to see a list of commands of what will happen plus -l to keep the log file for review. Highly recommended for the first run.  
 
 The default location for ksh on Ubuntu is /usr/bin/ksh. The default location for ksh93 on OpenNAS (FreeBSD) is /usr/local/bin/ksh93. 
 
