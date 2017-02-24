@@ -148,6 +148,7 @@ wflag=
 
 EXCLUDES=""
 DELETE=""
+DELETE_EXCLUDED=""
 OLD_VERSION=""
 DRYRUN=""
 EXTRA_FLAGS=""
@@ -184,7 +185,8 @@ do
   D)  #Dflag=1
     #Delete files from destination that do not exist on source
     #Dval="$OPTARG"
-    DELETE="--delete --delete-excluded" 
+    DELETE="--delete"
+    DELETE_EXCLUDED="--delete-excluded" 
     ;;
   d)  dflag=1
     #Days to keep archive
@@ -518,11 +520,11 @@ printf "Start Rsync: %s\nrsync flags\nEXTRA=%s\nOLD=%s\nVERBOSE=%s\nDELETE=%s\nE
 
 #echo  "$EXTRA_FLAGS" "$DRYRUN" --human-readable $VERBOSE $OLD_VERSION --stats --no-whole-file "$DELETE" "$EXCLUDES" "$ORIGINAL_DIR" "$BACKUP_DIR" 
 #exit
-EXTRA_FLAGS="$EXTRA_FLAGS $DELETE $EXCLUDES"
+EXTRA_FLAGS="$EXTRA_FLAGS $EXCLUDES"
 if [ "$EXTRA_FLAGS" == "" ]; then 
-  rsync  -rltgDz $DRYRUN --human-readable $VERBOSE $OLD_VERSION --stats --no-whole-file "$ORIGINAL_DIR" "$BACKUP_DIR" >> "$LOG_FILE" 2>&1
+  rsync  -rltgDz $DRYRUN --human-readable $DELETE $DELETE_EXCLUDED $VERBOSE $OLD_VERSION --stats --no-whole-file "$ORIGINAL_DIR" "$BACKUP_DIR" >> "$LOG_FILE" 2>&1
 else 
-  rsync  -rltgDz "$EXTRA_FLAGS" $DRYRUN --human-readable $VERBOSE $OLD_VERSION --stats --no-whole-file "$ORIGINAL_DIR" "$BACKUP_DIR" >> "$LOG_FILE" 2>&1
+  rsync  -rltgDz "$EXTRA_FLAGS" $DRYRUN --human-readable $DELETE $DELETE_EXCLUDED $VERBOSE $OLD_VERSION --stats --no-whole-file "$ORIGINAL_DIR" "$BACKUP_DIR" >> "$LOG_FILE" 2>&1
 fi
 
 ERROR_CODE=$?
