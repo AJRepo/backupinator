@@ -4,6 +4,7 @@
 #FreeNAS use shell: /usr/local/bin/ksh93
 #Copyright 2000 Afan Ottenheimer
 # This script is very inode intensive and can use up inodes sooner than actual physical space on a disk unless you are using an inodeess filesystem like ReiserFS
+BACKUPINATOR_TMP_FILE="/tmp/backupinator.tmp"
 
 #set -x
 VERSION="2.4.0"
@@ -147,6 +148,7 @@ wflag=
 #Sflag=
 
 EXCLUDES=""
+EXCLUDES_INT=0
 DELETE=""
 DELETE_EXCLUDED=""
 OLD_VERSION=""
@@ -200,12 +202,10 @@ do
     ;;
   E)  #Eflag=1
     #Exclude options passed to rsync
-    #eval="$OPTARG"
-    if [ "$EXCLUDES" == "" ]; then 
-      EXCLUDES="--exclude=$OPTARG"
-    else 
-      EXCLUDES="$EXCLUDES --exclude=$OPTARG"
-    fi
+    #strip whitespace from end of $OPTARG and put into array
+    OPTARG=$(echo "$OPTARG" | sed -e /\ $/s///)
+    EXCLUDES[EXCLUDES_INT]="$OPTARG"
+    ((EXCLUDES_INT++))
     ;;
   f)  #fflag=1
     #If you want to pass an extra flag to rsync.
@@ -509,7 +509,7 @@ else
     fi
 fi
 
-printf "Start Rsync: %s\nrsync flags\nEXTRA=%s\nOLD=%s\nVERBOSE=%s\nDELETE=%s\nEXCLUDES=%s\nORIG=%sBACK=%s\n\n" "$(date)" "$EXTRA_FLAGS" $OLD_VERSION "$VERBOSE" "$DELETE" "$EXCLUDES" "$ORIGINAL_DIR" "$BACKUP_DIR" >> "$LOG_FILE"
+printf "Start Rsync: %s\nrsync flags\nEXTRA=%s\nOLD=%s\nVERBOSE=%s\nDELETE=%s\nEXCLUDES=%s\nORIG=%sBACK=%s\n\n" "$(date)" "$EXTRA_FLAGS" $OLD_VERSION "$VERBOSE" "$DELETE" "${EXCLUDES[@]}" "$ORIGINAL_DIR" "$BACKUP_DIR" >> "$LOG_FILE"
 
 #Some good excludes for backing up windows machines
 #--exclude '*.bak' --exclude '*.BAK' --exclude '*.tmp' --exclude '*.TMP' --exclude '*.lnk' --exclude 'B*.rbf'
@@ -518,14 +518,27 @@ printf "Start Rsync: %s\nrsync flags\nEXTRA=%s\nOLD=%s\nVERBOSE=%s\nDELETE=%s\nE
 #really when we are connecting to a windows machine - we don't care about owner
 #dropping -o 
 
-#echo  "$EXTRA_FLAGS" "$DRYRUN" --human-readable $VERBOSE $OLD_VERSION --stats --no-whole-file "$DELETE" "$EXCLUDES" "$ORIGINAL_DIR" "$BACKUP_DIR" 
+#echo  "$EXTRA_FLAGS" "$DRYRUN" --human-readable $VERBOSE $OLD_VERSION --stats --no-whole-file "$DELETE" "${EXCLUDES[@]}" "$ORIGINAL_DIR" "$BACKUP_DIR" 
 #exit
-EXTRA_FLAGS="$EXTRA_FLAGS $EXCLUDES"
-if [ "$EXTRA_FLAGS" == "" ]; then 
-  rsync  -rltgDz $DRYRUN --human-readable $DELETE $DELETE_EXCLUDED $VERBOSE $OLD_VERSION --stats --no-whole-file "$ORIGINAL_DIR" "$BACKUP_DIR" >> "$LOG_FILE" 2>&1
-else 
-  rsync  -rltgDz "$EXTRA_FLAGS" $DRYRUN --human-readable $DELETE $DELETE_EXCLUDED $VERBOSE $OLD_VERSION --stats --no-whole-file "$ORIGINAL_DIR" "$BACKUP_DIR" >> "$LOG_FILE" 2>&1
-fi
+echo "#Files to be excluded by backupinator" > $BACKUPINATOR_TMP_FILE
+for FOO in "${EXCLUDES[@]}"; do 
+  echo "${FOO}" >> $BACKUPINATOR_TMP_FILE
+done
+rsync_args=("-rltgDz" 
+            "--stats" 
+            "--no-whole-file"
+            "--human-readable" 
+            $DRYRUN 
+            $DELETE 
+            $DELETE_EXCLUDED 
+            $VERBOSE 
+            "--exclude-from=$BACKUPINATOR_TMP_FILE"
+            $OLD_VERSION 
+            "$EXTRA_FLAGS"
+            "${ORIGINAL_DIR}" 
+            "${BACKUP_DIR}"
+)
+rsync "${rsync_args[@]}" >> "$LOG_FILE" 2>&1
 
 ERROR_CODE=$?
 if [ "$ERROR_CODE" != 0 ] ; then
