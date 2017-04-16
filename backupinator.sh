@@ -14,14 +14,14 @@ USERNAME=$(whoami)
 
 MAJOR_RSYNC_VERSION=$(rsync --version | grep version | awk '{print $3}' | awk -F . '{print $1}')
 RSYNC_VERSION=$(rsync --version | grep version )
-if [ "$?" == "127" ]; then 
+if [ "$?" == "127" ]; then
   echo "ERROR: Requires rsync to be installed and in the path"
   exit 2
 fi
 
 OS="linux"
 RESULTOS=$(freebsd-version 2>/tmp/backupinator.tmp)
-if [ "$?" == "0" ]; then 
+if [ "$?" == "0" ]; then
   echo "Detected OS as $RESULTOS" > /tmp/backupinator.tmp
   OS="FreeBSD"
 fi
@@ -46,7 +46,7 @@ fi
 #echo "$IFCONFIG"
 #exit;
 
-if [ "$MAJOR_RSYNC_VERSION" -lt 3 ] ; then  
+if [ "$MAJOR_RSYNC_VERSION" -lt 3 ] ; then
   echo "WARNING: older versions of rsync used -h for help. Newer ones use --human-readable. We have detected that you are using version $MAJOR_RSYNC_VERSION. This program works best with rsync version 3 or higher. Please use an rsync with --human-readable as a valid parameter"
   exit 2
 fi
@@ -78,7 +78,7 @@ ORIGINAL_DIR="/home/ldapusers/"
 BACKUP_ROOT_LEVEL="/mnt/esata/"
 BACKUP_DIR="$BACKUP_ROOT_LEVEL/current/"
 
-#for archiving override with r flag  
+#for archiving override with r flag
 #ARCHIVE_DIR="/data/Project_archives"
 ARCHIVE_DIR=""
 #for archiving, override with R flag
@@ -92,9 +92,9 @@ EMAIL_SUBJECT=$WHICH_MACHINE.backup
 NOW=$(date +%Y-%m-%d_%H-%M)
 
 PROGRAM_NAME=$(basename "$0")
-USAGE_TEXT="$PROGRAM_NAME Version: $VERSION 
+USAGE_TEXT="$PROGRAM_NAME Version: $VERSION
 
-Usage: $PROGRAM_NAME [-l] [-v] <-i input_directory> <-o backup_directory> [-a alert@email.addresses] [-d #days_to_keep] [-E exclude] [-e errors@email.address,err@address2,...]  
+Usage: $PROGRAM_NAME [-l] [-v] <-i input_directory> <-o backup_directory> [-a alert@email.addresses] [-d #days_to_keep] [-E exclude] [-e errors@email.address,err@address2,...]
 
 -l      Create a log file and keep it (otherwise delete log file)
 -v      Debug Mode (very verbose)
@@ -102,7 +102,7 @@ Usage: $PROGRAM_NAME [-l] [-v] <-i input_directory> <-o backup_directory> [-a al
 -i      directory     Original Directory (input), required
 -o      directory    Backup Directory (output), required
 -O      Rsync servers older than 2.6.3 need this flag
--b      Create a hardlinked backup like YYYYMMDD.HHMMSS? 
+-b      Create a hardlinked backup like YYYYMMDD.HHMMSS?
 -a      email1,email2,...   Send Notices (e.g. done! good things)  to these email addresses
 -A      email1,email2,...   Send Alerts (e.g. administrative verbose messages.) to email addresses
 -e      email1,email2,...  Send Errors to this email address (e.g. out of space!)
@@ -111,10 +111,10 @@ Usage: $PROGRAM_NAME [-l] [-v] <-i input_directory> <-o backup_directory> [-a al
 -E      Exclude files   Pattern of files to exclude, can be used more than once
 -f      Extra flags    Anything else you want to pass to rsync
 -h      host      A remote host - used to ping first to see if it is up. If not used then it will just assume the host is available
--m      CIFS_mount_drive   Sometimes CIFS connections hang to windows servers - this unmounts and remounts all CIFS shares. TODO: just operate on the CIFS share specified. 
+-m      CIFS_mount_drive   Sometimes CIFS connections hang to windows servers - this unmounts and remounts all CIFS shares. TODO: just operate on the CIFS share specified.
 -M      Mountpoint_dir   Check to make sure that dir Mountpoint_dir is a mounted directory. This is to avoid writing to your own disk when expecting it to be a externally attached drive
 -r      Archive directory   What directory to archive to (does not work on FreeBSD)
--R      Archive PATTERN   Pattern of files to copy to the archive directory - 
+-R      Archive PATTERN   Pattern of files to copy to the archive directory -
         (Archive Files are a permanent copy of files that are never deleted)
 -s      Subject for Email   Something to use on the email subject line
 -S      Reserved for later: Rsync over ssh
@@ -180,7 +180,7 @@ do
     ADMIN_MAIL_GROUP="$OPTARG"
     ;;
   b)  #bflag=1
-    #Create backup in link format - datestamped? 
+    #Create backup in link format - datestamped?
     #bval="$OPTARG"
     MAKE_BACKUP_DIRECTORY="yes"
     ;;
@@ -188,7 +188,7 @@ do
     #Delete files from destination that do not exist on source
     #Dval="$OPTARG"
     DELETE="--delete"
-    DELETE_EXCLUDED="--delete-excluded" 
+    DELETE_EXCLUDED="--delete-excluded"
     ;;
   d)  dflag=1
     #Days to keep archive
@@ -297,7 +297,7 @@ fi
 if [ "$Mflag" == 1 ] ; then
   RESULT=$(mount | grep "$MOUNT_POINT_DIR")
   #RESULT=`mountpoint $MOUNT_POINT_DIR`
-    if [ $? -eq 1 ] ; then 
+    if [ $? -eq 1 ] ; then
     printf "OutputDirectory: %s. (\033[1m-M MOUNT_POINT_DIR\033[0m) \n\n %s" "$RESULT" "$USAGE_TEXT" >&2
     exit 2
   fi
@@ -306,15 +306,15 @@ fi
 if [ "$Rflag" == 1 ] ; then
   #check to see if it starts with a / and if so error out
   FIRST_CHAR=${ARCHIVE_FILES:0:1}
-  if [ "$FIRST_CHAR" == "/" ] ; then 
+  if [ "$FIRST_CHAR" == "/" ] ; then
     echo "The path to the Archive files must be relative to the root backup directory (e.g. -i ). You appear to have specified an absolute path ($ARCHIVE_FILES) since it starts with a /. Cowardly stopping. "
     exit
-  fi  
-fi 
+  fi
+fi
 
 #test to see if is rsync connection
 echo "$ORIGINAL_DIR" | egrep "^rsync://" > /dev/null 2>&1
-if [ "$?" == "0" ]; then 
+if [ "$?" == "0" ]; then
   # If it is then set hflag = 1 if not set already
   if [ "$hflag" == "" ] ; then
     hflag=1
@@ -324,30 +324,30 @@ if [ "$?" == "0" ]; then
   fi
 
 
-  #quick test to see if Rsync is running on remote server and that 
+  #quick test to see if Rsync is running on remote server and that
   #we are good to go. rm -rf ./
-  rsync "$RSYNC_HOST" > /tmp/error_message_no_archive 2>&1 
+  rsync "$RSYNC_HOST" > /tmp/error_message_no_archive 2>&1
   ERROR_CODE=$?
   if [ "$ERROR_CODE" != 0 ] ; then
     if [ "$eflag" == 1 ] ; then
-      echo "Hello- 
-             This is your backup machine $WHICH_MACHINE. Rsync Failed Error[$ERROR_CODE]. 
+      echo "Hello-
+             This is your backup machine $WHICH_MACHINE. Rsync Failed Error[$ERROR_CODE].
              Command was: $0 $* !" >> /tmp/error_message_no_archive;
       mail -s "RSYNC FAILURE $WHICH_MACHINE" "$ERROR_MAIL_GROUP" < /tmp/error_message_no_archive ;
       rm /tmp/error_message_no_archive
     fi
   fi
 else
-  #this is NOT an rsync server and must be local or a mount. Lets test to see if we can access the directory  
+  #this is NOT an rsync server and must be local or a mount. Lets test to see if we can access the directory
   ORIGINAL_DIR_TEST=$(find "$ORIGINAL_DIR" -maxdepth 2 -type d -wholename "$ORIGINAL_DIR" )
   if [ ! -d "$ORIGINAL_DIR_TEST" ] ; then
 
-    #directory didn't appear - could be problems with a windows connection. 
+    #directory didn't appear - could be problems with a windows connection.
     #let's try unmounting and re-mounting
     if [ "$mflag" == 1 ] ; then
     #do a ls to re-conenct to make sure the connection is still good
       #TODO: Use "$CIFS_MOUNT"
-      if [ "$CIFS_MOUNT" == "" ]; then 
+      if [ "$CIFS_MOUNT" == "" ]; then
         #TODO: Check that umount/mount is successful
         umount -a -t cifs
         sleep 1
@@ -361,12 +361,12 @@ else
         sleep 1
       fi
     fi
-  
+
   fi
 
   #now lets test again after previous test
   if [ ! -d "$ORIGINAL_DIR_TEST" ] ; then
-    echo "Hello- 
+    echo "Hello-
   This is your backup machine $WHICH_MACHINE. Trying to connect to the original directory $ORIGINAL_DIR and could not." > /tmp/error_message_no_link;
     if [ "$eflag" == 1 ] ; then
       mail -s "FAILURE $WHICH_MACHINE" "$ERROR_MAIL_GROUP" < /tmp/error_message_no_link ;
@@ -381,7 +381,7 @@ else
 fi   #end if test to see if remote site is rsync and up
 #exit
 
-if [ "$CREATE_LOG" == "yes" ] ; then 
+if [ "$CREATE_LOG" == "yes" ] ; then
   VERBOSE="-v --itemize-changes"
   LOG_FILE=$BACKUP_ROOT_LEVEL/backup.$LONGDATE.log
 else
@@ -391,14 +391,14 @@ fi
 
 
 #If hflag=1 (remote host) then use ping check to see if it is up
-if [ "$hflag" == 1 ] ; then 
-    
+if [ "$hflag" == 1 ] ; then
+
   TEST=$(which ping)
-  if [ "$TEST" == "" ] ; then 
+  if [ "$TEST" == "" ] ; then
     echo "If you are going to use the -h flag then ping must be installed";
     exit
   fi
-  
+
   #test for icmp response
   #fping -u: Show targets that are unreachable
   #for SERVER in $(fping -u "$REMOTE_SERVER"); do
@@ -408,24 +408,24 @@ if [ "$hflag" == 1 ] ; then
   #  exit
   #done
   ping -c 1 -q "$REMOTE_SERVER" > "/tmp/backupinator.$SERVER"
-  if [ $? == 1 ]; then 
+  if [ $? == 1 ]; then
     echo "$SERVER does not respond to ping" >> "/tmp/backupinator.$SERVER"
     echo "NOT BACKING UP $SERVER" >> "/tmp/backupinator.$SERVER"
     mail -s "$HOSTNAME: $NAME SERVER $SERVER IS DOWN!!!!" "$ERROR_MAIL_GROUP" < "/tmp/backupinator.$SERVER"
     exit
-  fi 
+  fi
 fi
 
 
 #are we full - Bytes? the -P flag is to keep the output from wrapping
 USED_SPACE=$(df -P "$BACKUP_ROOT_LEVEL" | awk '{print $5}' | sed -e /%/s/// | tail -1 )
 
-if [ "$USED_SPACE" == 100 ] ; then 
+if [ "$USED_SPACE" == 100 ] ; then
   echo "I tried to backup  $NAME but there was an error: Disk is Full" > "/tmp/Rsync_Error.$NAME"
   echo "The Script has ended. No backup was made." >> "/tmp/Rsync_Error.$NAME"
   mail -s "$HOSTNAME: $NAME RSYNC Error:" "$ERROR_MAIL_GROUP" < "/tmp/Rsync_Error.$NAME"
   exit;
-fi 
+fi
 
 if [ "$wflag" == 1 ] ; then
   if [ "$WARNING_LEVEL" != '' ] && [ "$WARNING_LEVEL" -lt "$USED_SPACE" ] ; then
@@ -442,23 +442,23 @@ if [ "$FS_TYPE" != "reiserfs" ] ; then
   #ugh, now don't you wish you'd used a reiserfs system.
         if [ "$OS" == "FreeBSD" ]; then
     AVAILABLE_SPACE=$(df -P -i "$BACKUP_ROOT_LEVEL" |  awk '{print $7}' | tail -1)
-        else 
+        else
     AVAILABLE_SPACE=$(df -P -i "$BACKUP_ROOT_LEVEL" |  awk '{print $4}' | tail -1)
         fi
-  if [ "$AVAILABLE_SPACE" == 0 ] ; then 
+  if [ "$AVAILABLE_SPACE" == 0 ] ; then
       echo "I tried to backup  $NAME but there was an error: Disk Out of Inodes. Too bad you didn't use and indodeless File System" > "/tmp/Rsync_Error.$NAME"
       echo "The Script has ended. No backup was made." >> "/tmp/Rsync_Error.$NAME"
         if [ "$eflag" == 1 ] ; then
         mail -s "$HOSTNAME: $NAME RSYNC Error:" "$ERROR_MAIL_GROUP" < "/tmp/Rsync_Error.$NAME"
     fi
     exit;
-  fi 
-fi  
+  fi
+fi
 
 ##############CHECK TO see if previous rsync finished
 
 
-#How many processes are running? We don't want to run if there is already one working on that dir. 
+#How many processes are running? We don't want to run if there is already one working on that dir.
 #NUMBER_LINES=$(pgrep -fa -u "$USERNAME" "rsync.*$ORIGINAL_DIR" | grep "$BACKUP_DIR" | sed -e /grep/d | nl |  sed -e /"$USERNAME.*"/s/// | tail -1)
 NUMBER_LINES=$(pgrep -fc -u "$USERNAME" "rsync.*$ORIGINAL_DIR")
 
@@ -492,12 +492,12 @@ ARCHIVE_TEST_FILE=$(find "$ARCHIVE_FILES" -maxdepth 1 -mindepth 1 -name "$ARCHIV
 if [ "$rflag" == 1 ] && [ $Rflag == 1 ] && [ -d "$ARCHIVE_DIR" ] && [ -e "$ARCHIVE_TEST_FILE" ] ; then
   printf "Start Project Archives: %s\n" "$(date)">> "$LOG_FILE"
   echo "ajo_cp -ulr --preserve=timestamps -f --remove-destination $BACKUP_DIR/$ARCHIVE_FILES $ARCHIVE_DIR" >> "$LOG_FILE"
-  if [ "$nflag" == 1 ] ; then 
+  if [ "$nflag" == 1 ] ; then
     echo "DRY RUN - not performing ARCHIVE step"
     echo "DRY_1: $BACKUP_DIR"
     echo "DRY_2: $ARCHIVE_FILES"
     echo "DRY_3: $ARCHIVE_DIR"
-  else 
+  else
     cp -ulr --preserve=timestamps -f --remove-destination "$BACKUP_DIR/$ARCHIVE_FILES" "$ARCHIVE_DIR"
   fi
 else
@@ -516,26 +516,26 @@ printf "Start Rsync: %s\nrsync flags\nEXTRA=%s\nOLD=%s\nVERBOSE=%s\nDELETE=%s\nE
 
 
 #really when we are connecting to a windows machine - we don't care about owner
-#dropping -o 
+#dropping -o
 
-#echo  "$EXTRA_FLAGS" "$DRYRUN" --human-readable $VERBOSE $OLD_VERSION --stats --no-whole-file "$DELETE" "${EXCLUDES[@]}" "$ORIGINAL_DIR" "$BACKUP_DIR" 
+#echo  "$EXTRA_FLAGS" "$DRYRUN" --human-readable $VERBOSE $OLD_VERSION --stats --no-whole-file "$DELETE" "${EXCLUDES[@]}" "$ORIGINAL_DIR" "$BACKUP_DIR"
 #exit
 echo "#Files to be excluded by backupinator" > $BACKUPINATOR_TMP_FILE
-for FOO in "${EXCLUDES[@]}"; do 
+for FOO in "${EXCLUDES[@]}"; do
   echo "${FOO}" >> $BACKUPINATOR_TMP_FILE
 done
-rsync_args=("-rltgDz" 
-            "--stats" 
+rsync_args=("-rltgDz"
+            "--stats"
             "--no-whole-file"
-            "--human-readable" 
-            $DRYRUN 
-            $DELETE 
-            $DELETE_EXCLUDED 
-            $VERBOSE 
+            "--human-readable"
+            $DRYRUN
+            $DELETE
+            $DELETE_EXCLUDED
+            $VERBOSE
             "--exclude-from=$BACKUPINATOR_TMP_FILE"
-            $OLD_VERSION 
+            $OLD_VERSION
             "$EXTRA_FLAGS"
-            "${ORIGINAL_DIR}" 
+            "${ORIGINAL_DIR}"
             "${BACKUP_DIR}"
 )
 rsync "${rsync_args[@]}" >> "$LOG_FILE" 2>&1
@@ -544,12 +544,12 @@ ERROR_CODE=$?
 if [ "$ERROR_CODE" != 0 ] ; then
   if [ "$eflag" == 1 ] ; then
     echo "Hello
-   This is your backup machine $WHICH_MACHINE. 
+   This is your backup machine $WHICH_MACHINE.
   Rsync Failed Error[$ERROR_CODE]!
   Rsync Client Version: $RSYNC_VERSION
   Backup Version: $VERSION
   $0 $*" > /tmp/error_message_no_archive;
-    awk '/^rsync/ {print $0}' "$LOG_FILE" >> /tmp/error_message_no_archive 
+    awk '/^rsync/ {print $0}' "$LOG_FILE" >> /tmp/error_message_no_archive
     mail -s "RSYNC FAILURE $WHICH_MACHINE" "$ERROR_MAIL_GROUP" < /tmp/error_message_no_archive ;
    fi
 fi
@@ -560,24 +560,24 @@ End Rsync: " >> "$LOG_FILE"
 date >> "$LOG_FILE"
 
 
-if [[ "$MAKE_BACKUP_DIRECTORY" == "yes" ]] ; then 
-  #now that we've made the rsync backup - lets preserve the data in 
+if [[ "$MAKE_BACKUP_DIRECTORY" == "yes" ]] ; then
+  #now that we've made the rsync backup - lets preserve the data in
   # a new directory. use hard links to save space
-  if [ "$nflag" == 1 ] ; then 
+  if [ "$nflag" == 1 ] ; then
     echo "DRY RUN - not performing BACKUP_STEP step"
     echo "ajo_cp -al $BACKUP_DIR $BACKUP_ROOT_LEVEL/backup.$NOW"
-  else 
+  else
     cp -al "$BACKUP_DIR" "$BACKUP_ROOT_LEVEL/backup.$NOW"
     touch "$BACKUP_ROOT_LEVEL/backup.$NOW"
   fi
 fi
 
-if [ "$eflag" == "" ] ; then 
+if [ "$eflag" == "" ] ; then
   echo "Warning: Error message delivery going to root user"
 fi
 
 #If dflag=1 then we look for that many days ago and delete it
-if [ "$dflag" == 1 ] ; then 
+if [ "$dflag" == 1 ] ; then
   if [ "$OS" == "FreeBSD" ]; then
     OLDEST_DATE=$(date -v -"${DAYS_TO_KEEP}d" +%Y-%m-%d)
   else
@@ -606,8 +606,8 @@ B_ROOT_LEVEL = $BACKUP_ROOT_LEVEL" >> /tmp/error_message_no_delete
 
   #santity checks
   SANITY=1
-  for SANITY_CHECK_DIR in '/data' '' '.' '/' '.*' '/var' '/tmp' '/home' '/media' '/etc' '* .*' '/usr' '/bin' '/boot'; do 
-    if [ "$OLDEST_DIR" == "$SANITY_CHECK_DIR" ]; then 
+  for SANITY_CHECK_DIR in '/data' '' '.' '/' '.*' '/var' '/tmp' '/home' '/media' '/etc' '* .*' '/usr' '/bin' '/boot'; do
+    if [ "$OLDEST_DIR" == "$SANITY_CHECK_DIR" ]; then
       printf "Error: I don't think you wanted to delete %s. Not doing it" "$OLDEST_DIR" >> /tmp/error_message_no_delete
       SANITY=0
     fi
@@ -615,17 +615,17 @@ B_ROOT_LEVEL = $BACKUP_ROOT_LEVEL" >> /tmp/error_message_no_delete
 
   #and lets delete the oldest file
   if [ -d "$OLDEST_DIR" ] && [ "$SANITY" == 1 ] ; then
-    if [ "$nflag" == 1 ] ; then 
+    if [ "$nflag" == 1 ] ; then
       echo "DRY RUN - not performing DELETE step"
       echo "ajo_rm -rf $OLDEST_DIRS"
-    else 
+    else
       rm -rf "$OLDEST_DIRS"
     fi
   fi
-  # you may ask - "Why don't you use 'find' to delete old directories?" The answer is that because we 
-  # are using hard links instead of an actual new directory - the datestamp of the directories may not 
-  # be the date of creation. Also we don't want to just indiscriminately delete everything - just the 
-  # backup directories. 
+  # you may ask - "Why don't you use 'find' to delete old directories?" The answer is that because we
+  # are using hard links instead of an actual new directory - the datestamp of the directories may not
+  # be the date of creation. Also we don't want to just indiscriminately delete everything - just the
+  # backup directories.
 
   echo "Deleting backup dirs $OLDEST_DIRS" >> "$LOG_FILE"
 
@@ -652,7 +652,7 @@ PERCENT_USED=$(df -P -h "$BACKUP_ROOT_LEVEL" | awk '{ print $5 }' | tail -1 )
         rm "$LOG_FILE.simple"
   fi
 
-if [[ "$CREATE_LOG" == "yes" ]] ; then 
+if [[ "$CREATE_LOG" == "yes" ]] ; then
   gzip "$LOG_FILE"
 else
   rm "$LOG_FILE"
