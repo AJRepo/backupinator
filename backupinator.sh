@@ -106,7 +106,7 @@ Usage: $PROGRAM_NAME [-l] [-v] <-i input_directory> <-o backup_directory> [-a al
 -a      email1,email2,...   Send Notices (e.g. done! good things)  to these email addresses
 -A      email1,email2,...   Send Alerts (e.g. administrative verbose messages.) to email addresses
 -e      email1,email2,...  Send Errors to this email address (e.g. out of space!)
--d N    Delete directories N days old in the -o directory
+-d N    Delete directories N days old in the -o directory (these files exist only if -b flag was used)
 -D      Delete files that do not exist on sender
 -E      Exclude files   Pattern of files to exclude, can be used more than once
 -f      Extra flags    Anything else you want to pass to rsync
@@ -396,7 +396,7 @@ if [ "$hflag" == 1 ] ; then
   TEST=$(which ping)
   if [ "$TEST" == "" ] ; then
     echo "If you are going to use the -h flag then ping must be installed";
-    exit
+    exit 2
   fi
 
   #test for icmp response
@@ -576,7 +576,12 @@ if [ "$eflag" == "" ] ; then
   echo "Warning: Error message delivery going to root user"
 fi
 
-#If dflag=1 then we look for that many days ago and delete it
+#If dflag=1 then we look for that many days ago and delete it. These files would only exist if
+# the -b flag were used.
+if [ "$dflag" == 1 ] && [ "$MAKE_BACKUP_DIRECTORY" != "yes" ] ; then
+  echo "ERROR: -d set BUT are not backing up by date (-b). This will generate warnings when trying to delete directories that are not there."
+  exit 2
+fi
 if [ "$dflag" == 1 ] ; then
   if [ "$OS" == "FreeBSD" ]; then
     OLDEST_DATE=$(date -v -"${DAYS_TO_KEEP}d" +%Y-%m-%d)
