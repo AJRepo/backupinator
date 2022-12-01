@@ -61,17 +61,20 @@ backupinator.sh: [-l] [-v] <-i input\_directory> <-o backup\_directory> [-a aler
 
 #### Examples:
 
-* Backup to mounted directory /path/to/backup/dir with the following 
-  * a check to see if the backup drive has less than 90% filled before backing up to it, 
-  * delete directories over 20 days old, 
-  * ignore files/directories named .snap
-  * errors sent to errors@example.com
-  * save the log file (-l) instead of deleting it at the end
+* This example does the following:
+  * Backs up to a mounted directory (-M flag checks that it is mounted first and attempt to remount if not)
+  * Specifies the backup directory as /path/to/backup/dir 
+  * Checks to see if the backup drive has less than 90% filled before backing up to it (-w 90 )
+  * Delete directories over 20 days old, (-d 20 ) 
+  * Ignores files/directories named .snap ( -E .snap )
+  * Sends errors to errors@example.com (-e errors@example.com)
+  * Saves the log file output (-l)
 
      ./backupinator.sh -l -i /path/to/input/directory/ -o /path/to/backup/dir -M /path/to/backup/dir  -a admin@example.com -w 90 -E .snap -b -e errors@example.com -d 20
 
 
-* Same as above but *also* ignore any files ending with .wav. The -E flag calls rsync's --exclude flag.
+* This next example does the same as above but *also* 
+  * ignores any files ending with .wav. The -E flag calls rsync's --exclude flag.  (-E .snap -E .wav )
 
      ./backupinator.sh -l -i /path/to/input/directory/ -o /path/to/backup/dir -M /path/to/backup/dir  -a admin@example.com -w 90 -E .snap -E .wav -b -e errors@example.com -d 20
 
