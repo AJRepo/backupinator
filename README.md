@@ -47,7 +47,7 @@ backupinator.sh: [-l] [-v] <-i input\_directory> <-o backup\_directory> [-a aler
 -f      Extra flags    Anything else you want to pass to rsync
 -h      host      A remote host - ping first to see if it is up. If not used assume the host is available
 -m      CIFS_mount_drive   Sometimes CIFS connections hang to windows servers - this unmounts and remounts all CIFS shares. TODO: just operate on the CIFS share specified. 
--M      Mountpoint_dir: Check that dir Mountpoint_dir is a mounted directory. This is to avoid writing to your own disk when expecting it to be a externally attached drive
+-M      directory Mountpoint_dir: Check that Mountpoint_dir is a mounted directory. This is to avoid writing to your own disk when expecting it to be a externally attached drive
 -r      Archive directory   What directory to archive to (does not work on FreeBSD)
 -R      Archive PATTERN   Pattern of files to copy to the archive directory
         (Archive files are a permanent copy of files that are never deleted)
@@ -72,17 +72,17 @@ backupinator.sh: [-l] [-v] <-i input\_directory> <-o backup\_directory> [-a aler
   * Sends notifications to admins@example.com (-a admin@example.com)
   * Saves the log file output (-l)
 
-     ./backupinator.sh -l -i /path/to/input/directory/ -o /path/to/backup/dir -M /path/to/backup/dir  -a admin@example.com -w 90 -E .snap -b -e errors@example.com -d 20
+     ./backupinator.sh -l -i /path/to/input/directory/ -o /path/to/backup/dir -M /path/to/mount/point  -a admin@example.com -w 90 -E .snap -b -e errors@example.com -d 20
 
 
 * This next example does the same as above but *also* 
   * ignores any files ending with .wav. The -E flag calls rsync's --exclude flag.  (-E .snap -E .wav )
 
-     ./backupinator.sh -l -i /path/to/input/directory/ -o /path/to/backup/dir -M /path/to/backup/dir  -a admin@example.com -w 90 -E .snap -E .wav -b -e errors@example.com -d 20
+     ./backupinator.sh -l -i /path/to/input/directory/ -o /path/to/backup/dir -M /path/to/mount/point  -a admin@example.com -w 90 -E .snap -E .wav -b -e errors@example.com -d 20
      
 * Let's say your backup machine is a remote network mount `myNFSbackup.example.com` and your machine will hang for what seems forever if it can't access that network mount (i.e. NFS4) . Add a ping test before running the mount command. This example does the same as the above and *also* adds that test and abort the script before a mount test is done.
 
-     ./backupinator.sh -l -i /path/to/input/directory/ -o /path/to/backup/dir -M /path/to/backup/dir  -a admin@example.com -w 90 -E .snap -E .wav -b -e errors@example.com -d 20 -h myNFSbackup.example.com
+     ./backupinator.sh -l -i /path/to/input/directory/ -o /path/to/backup/dir -M /path/to/mount/point  -a admin@example.com -w 90 -E .snap -E .wav -b -e errors@example.com -d 20 -h myNFSbackup.example.com
      
 
 ### Notes
@@ -90,6 +90,8 @@ backupinator.sh: [-l] [-v] <-i input\_directory> <-o backup\_directory> [-a aler
 See the License file for copyright terms. Use of this script is at your own risk. Linux/Unix does not ask "if you meant to do that" and there are "rm -rf" commands in this script if you choose to use the -d flag. 
 
 Use the "-n" flag for a "dry run" to see a list of commands of what will happen plus -l to keep the log file for review. Highly recommended for the first run.  
+
+Note that there is a difference between `directory` and `directory/` in rsync (note the slash at the end of the directory name). Backupinator passes arguments to rsync so don't be surprised if `-i /path/to/input/dir` gives you different results than `-i /path/to/input/dir/` and likewise for the -o flag. 
 
 The default location for ksh on Ubuntu is /usr/bin/ksh. The default location for ksh93 on OpenNAS (FreeBSD) is /usr/local/bin/ksh93. 
 
