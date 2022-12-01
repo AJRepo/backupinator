@@ -37,7 +37,7 @@ backupinator.sh: [-l] [-v] <-i input\_directory> <-o backup\_directory> [-a aler
 -i      directory     Original Directory (input), required
 -o      directory    Backup Directory (output), required
 -O      Rsync servers older than 2.6.3 need this flag
--b      Create a hardlinked backup like YYYYMMDD.HHMMSS? 
+-b      Create a hardlinked backup like YYYYMMDD.HHMMSS (for deduplication)
 -a      email1,email2,...   Send Notices (e.g. done! good things)  to these email addresses
 -A      email1,email2,...   Send Alerts (e.g. administrative verbose messages.) to email addresses
 -e      email1,email2,...  Send Errors to this email address (e.g. out of space!)
@@ -62,12 +62,14 @@ backupinator.sh: [-l] [-v] <-i input\_directory> <-o backup\_directory> [-a aler
 #### Examples:
 
 * This example does the following:
-  * Backs up to a mounted directory (-M flag checks that it is mounted first and attempt to remount if not)
-  * Specifies the backup directory as /path/to/backup/dir 
+  * Backs up the directory (and all subdirectories) /path/to/input/directory/ (-i flag) 
+  * Specifies the backup directory as /path/to/backup/dir  (-o flag ) 
+  * Specifies that the backup directory is a mountpoint and attempt to remount if not mounted. Errs out if it can't mount ( -M flag) 
   * Checks to see if the backup drive has less than 90% filled before backing up to it (-w 90 )
   * Delete directories over 20 days old, (-d 20 ) 
   * Ignores files/directories named .snap ( -E .snap )
   * Sends errors to errors@example.com (-e errors@example.com)
+  * Sends notifications to admins@example.com (-a admin@example.com)
   * Saves the log file output (-l)
 
      ./backupinator.sh -l -i /path/to/input/directory/ -o /path/to/backup/dir -M /path/to/backup/dir  -a admin@example.com -w 90 -E .snap -b -e errors@example.com -d 20
@@ -77,6 +79,11 @@ backupinator.sh: [-l] [-v] <-i input\_directory> <-o backup\_directory> [-a aler
   * ignores any files ending with .wav. The -E flag calls rsync's --exclude flag.  (-E .snap -E .wav )
 
      ./backupinator.sh -l -i /path/to/input/directory/ -o /path/to/backup/dir -M /path/to/backup/dir  -a admin@example.com -w 90 -E .snap -E .wav -b -e errors@example.com -d 20
+     
+* Let's say your backup machine is a remote network mount `myNFSbackup.example.com` and your machine will hang for what seems forever if it can't access that network mount (i.e. NFS4) . Add a ping test before running the mount command. This example does the same as the above and *also* adds that test and abort the script before a mount test is done.
+
+     ./backupinator.sh -l -i /path/to/input/directory/ -o /path/to/backup/dir -M /path/to/backup/dir  -a admin@example.com -w 90 -E .snap -E .wav -b -e errors@example.com -d 20 -h myNFSbackup.example.com
+     
 
 ### Notes
 
