@@ -12,13 +12,21 @@ Historically, to deal with issues of network connectivity and CIFS hanging, this
 
 ### Dependencies
 
-Rsync and ksh. I wrote this originally in bash but converted to ksh because of the ability to use shcomp 
-to compile and deliver a perfectly working c binary. 
+* Rsync. 
+
+* A system that supports hard links (e.g. Linux, BSD) 
+
+* Optionally ksh: I wrote this originally in bash but converted to ksh because of the ability to use shcomp 
+to compile and deliver a perfectly working c binary. However you can change it to bash w/out changes. 
+
+* Optionally an inodeless file system like ReiserFS. This uses hard links for deduplication. However if you have a system that has a hard limit on inodes, unlimited time backups, and lots of files then you can run out of inodes LOOOOOONG before you run out of disk space.
+
+You can test your system for the above dependencies with the test script test\_deup.sh
 
 ### Syntax
  Usage: 
 
-backupinator.sh: [-l] [-v] <-i input_directory> <-o backup_directory> [-a alert@email.addresses] [-d #days_to_keep] [-E exclude] [-e errors@email.address,err@address2,...] 
+backupinator.sh: [-l] [-v] <-i input\_directory> <-o backup\_directory> [-a alert@email.addresses] [-d #days_to_keep] [-E exclude] [-e errors@email.address,err@address2,...] 
 
 ```
  
