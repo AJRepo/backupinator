@@ -157,7 +157,7 @@ EXTRA_FLAGS=""
 
 
 #warning! make sure that a: is the first : in the list
-while getopts 'mnblDvOa:A:d:e:E:f:i:h:M:o:r:R:S:s:w:' OPTION
+while getopts 'mnblDvOa:A:d:e:E:f:i:h:M:o:r:R:s:w:' OPTION
 do
   case $OPTION in
   v)  #vflag=1
@@ -313,7 +313,7 @@ if [ "$Rflag" == 1 ] ; then
 fi
 
 #test to see if is rsync connection
-echo "$ORIGINAL_DIR" | egrep "^rsync://" > /dev/null 2>&1
+echo "$ORIGINAL_DIR" | grep -E "^rsync://" > /dev/null 2>&1
 if [ "$?" == "0" ]; then
   # If it is then set hflag = 1 if not set already
   if [ "$hflag" == "" ] ; then
